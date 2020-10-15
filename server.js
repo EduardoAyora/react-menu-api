@@ -2,12 +2,18 @@ const express = require('express')
 const app = express()
 const http = require('http').createServer(app)
 const cors = require('cors')
+const mongoose = require('mongoose')
 // const io = require('socket.io')(http)
 
-const exampleRouter = require('./routes/example')
+const ordersRouter = require('./routes/orders')
+
+mongoose.connect('mongodb://localhost:27017/menu', {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true
+});
 
 var corsOptions = {
-    origin: 'http://localhost:4000',
+    origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
 }
 
@@ -18,7 +24,7 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 // rutas de la api
-app.use('/', exampleRouter)
+app.use('/orders', ordersRouter)
 
 // io.on('connection', (socket) => {
 //     console.log('a user connected')
