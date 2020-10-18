@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 // const io = require('socket.io')(http)
 
 const ordersRouter = require('./routes/orders')
+const categoriesRouter = require('./routes/categories')
 
 mongoose.connect('mongodb://localhost:27017/menu', {
     useNewUrlParser: true, 
@@ -26,6 +27,7 @@ app.use(cors(corsOptions))
 app.use(express.json())
 
 // rutas de la api
+app.use('/categories', categoriesRouter)
 app.use('/orders', ordersRouter)
 
 // io.on('connection', (socket) => {
