@@ -1,7 +1,6 @@
 const express = require('express')
 const ordersRouter = express.Router()
 const Order = require('../models/order')
-const Detail = require('../models/detail')
 
 ordersRouter.route('/')
 .get(async (req, res) => {
@@ -13,26 +12,9 @@ ordersRouter.route('/')
     }
 })
 .post(async (req, res) => {
-    // creando los detalles
-    const details = req.body.details
-    for (let i = 0; i < details.length; i++) {
-        const detailToSave = new Detail({
-            quantity: details[i].quantity,
-            product: details[i].productId,
-            price: details[i].priceId
-        })
-        try {
-            const newDetail = await detailToSave.save()
-            details[i] = newDetail._id
-        } catch(err) {
-            return res.status(400).json({message: err.message})
-        }
-    }
-    // creando la orden
-    const order = new Order({
-        tableNumber: req.body.tableNumber,
-        details: details
-    })
+    const order = new Order(
+        req.body
+    )
     try {
         const newOrder = await order.save()
         res.status(201).json(newOrder)
