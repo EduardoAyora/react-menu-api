@@ -4,8 +4,8 @@ const Price = require('../models/price')
 async function exe() {
     try {
         await new Price({
-            value: 3.25,
-            description: 'grande'
+            value: 0.7,
+            description: 'unidad'
         }).save()
         mongoose.disconnect()
     } catch(err) {
