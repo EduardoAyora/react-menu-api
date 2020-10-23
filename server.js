@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const http = require('http').createServer(app)
@@ -16,7 +17,7 @@ mongoose.connect('mongodb://localhost:27017/menu', {
 });
 
 var corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: process.env.BASE_URL,
     optionsSuccessStatus: 200
 }
 
