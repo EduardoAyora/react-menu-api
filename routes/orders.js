@@ -6,7 +6,8 @@ const Detail = require('../models/detail')
 ordersRouter.route('/')
 .get(async (req, res) => {
     try {
-        const orders = await Order.find({})
+        const orders = await Order.find({}).populate({path: 'details', populate: {path: 'product'}})
+            .populate({path: 'details', populate: {path: 'price'}})
         res.json(orders)
     } catch(err) {
         res.status(500).json({message: err.message})
@@ -57,6 +58,15 @@ ordersRouter.route('/:id')
     }
 })
 .delete(getOrder, async (req, res) => {
+    const details = res.order.details
+    for (let i = 0; i < details.length; i++) {
+        try {
+            const detail = await Detail.findById(details[i]._id)
+            await detail.remove()
+        } catch(err) {
+            res.status(500).json({ message: err.message })
+        }
+    }
     try {
         await res.order.remove()
         res.json({ message: 'Orden eliminada' })
